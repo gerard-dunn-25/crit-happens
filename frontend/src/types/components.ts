@@ -16,9 +16,11 @@ type BoardProps = {
 }
 
 type DiceProps = {
+  index: number
   diceType: DiceType
   value: number
   isCritical: boolean
+  isRevealed: boolean
 }
 
 type ResultsProps = {
