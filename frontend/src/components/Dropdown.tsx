@@ -38,10 +38,10 @@ export default function Dropdown({
   }, [isOpen, controls])
 
   return (
-    <div className="dropdown-container">
-      <button className="dropdown-toggle" onClick={() => setIsOpen(!isOpen)}>
+    <div className="fixed top-4 right-4 z-10">
+      <button onClick={() => setIsOpen(!isOpen)}>
         <motion.div animate={controls}>
-          <GiDiceTwentyFacesTwenty />
+          <GiDiceTwentyFacesTwenty size={48} />
         </motion.div>
       </button>
 
@@ -52,7 +52,7 @@ export default function Dropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="dropdown"
+            className="fixed top-20 right-4 flex flex-col items-end gap-2"
           >
             <label>Select Dice Type:</label>
             <div className="dice-type-buttons">
