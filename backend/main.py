@@ -1,8 +1,16 @@
 import random
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class RollRequest(BaseModel):
     dice_type: int = Field (..., description="Number of sides on the dice (e.g. 4 for d4)")
