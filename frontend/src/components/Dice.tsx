@@ -1,7 +1,8 @@
 import type { DiceProps } from '../types'
-import { GiBurningSkull } from 'react-icons/gi'
+import { GiEvilWings, GiAngelWings } from 'react-icons/gi'
 import { motion, useAnimationControls } from 'framer-motion'
 import { useEffect } from 'react'
+import { useTheme } from '../context/useTheme'
 
 export default function Dice({
   rollKey,
@@ -12,6 +13,9 @@ export default function Dice({
   isCritical,
   isRevealed,
 }: DiceProps) {
+  const { theme } = useTheme()
+  const CritIcon = theme === 'dark' ? GiEvilWings : GiAngelWings
+
   const controls = useAnimationControls()
   useEffect(() => {
     if (!isRevealed && isRolling) {
@@ -41,14 +45,22 @@ export default function Dice({
         transition: { duration: 0.5, ease: 'easeOut' as const },
       })
     }
-  }, [isRevealed, controls, rollKey, spinDelay])
+  }, [isRolling, isRevealed, controls, rollKey, spinDelay])
 
   return (
-    <motion.div
-      animate={controls}
-      className={`dice d${diceType} ${isCritical ? 'critical' : ''}`}
-    >
-      <h2>{isRevealed ? isCritical ? <GiBurningSkull /> : value : '?'}</h2>
-    </motion.div>
+    <div data-theme={theme} className="dice-wrapper">
+      <motion.div
+        animate={controls}
+        className={`text-${theme} text-4xl dice d${diceType} ${isCritical ? 'critical' : ''}`}
+      >
+        <h2
+          className={
+            isRevealed && isCritical ? 'text-[var(--color-crimson)]' : ''
+          }
+        >
+          {isRevealed ? isCritical ? <CritIcon /> : value : '?'}
+        </h2>
+      </motion.div>
+    </div>
   )
 }
