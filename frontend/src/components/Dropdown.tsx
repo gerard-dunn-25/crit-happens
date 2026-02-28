@@ -59,7 +59,11 @@ export default function Dropdown({
               {availableDiceTypes.map((dice) => (
                 <button
                   key={dice}
-                  className={selectedDice === dice ? 'active' : ''}
+                  className={`px-3 py-2 rounded border ${
+                    selectedDice === dice
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-gray-300'
+                  }`}
                   onClick={() => onDiceTypeChange(dice)}
                 >
                   d{dice}
