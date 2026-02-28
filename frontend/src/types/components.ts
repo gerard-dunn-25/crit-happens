@@ -9,23 +9,26 @@ type DropdownProps = {
 }
 
 type BoardProps = {
+  rollKey: number
   selectedDice: DiceType
   numberOfDice: number
   result: RollResult | null
   status: Status
+  onAllRevealed: () => void
 }
 
 type DiceProps = {
-  index: number
+  rollKey: number
   diceType: DiceType
   value: number
   isCritical: boolean
+  isRolling: boolean
+  spinDelay: number
   isRevealed: boolean
 }
 
 type ResultsProps = {
   result: RollResult | null
-  status: Status
 }
 
 export type { DropdownProps, BoardProps, DiceProps, ResultsProps }
