@@ -1,11 +1,60 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useTheme } from './context/useTheme'
 import { rollDice, getDiceTypes } from './api'
 import type { RollResult, DiceType, Status } from './types'
 import Results from './components/Results'
 import Board from './components/Board'
 import Dropdown from './components/Dropdown'
+import { FiSun, FiMoon } from 'react-icons/fi'
+import { motion, AnimatePresence } from 'framer-motion'
+
+function useIsTouchDevice() {
+  const [isTouch, setIsTouch] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return (
+      'ontouchstart' in window ||
+      (navigator && (navigator.maxTouchPoints ?? 0) > 0) ||
+      window.matchMedia('(pointer: coarse)').matches
+    )
+  })
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(pointer: coarse)')
+    const update = () =>
+      setIsTouch(
+        'ontouchstart' in window ||
+          (navigator && (navigator.maxTouchPoints ?? 0) > 0) ||
+          mq.matches,
+      )
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', update)
+    } else {
+      // fallback for older browsers
+
+      mq.addListener(update)
+    }
+
+    // detect first-touch at runtime (helps hybrid devices)
+    const handleFirstTouch = () => update()
+    window.addEventListener('touchstart', handleFirstTouch, { once: true })
+
+    return () => {
+      if (typeof mq.removeEventListener === 'function') {
+        mq.removeEventListener('change', update)
+      } else {
+        mq.removeListener(update)
+      }
+      window.removeEventListener('touchstart', handleFirstTouch)
+    }
+  }, [])
+
+  return isTouch
+}
 
 export default function App() {
+  const isTouchDevice = useIsTouchDevice()
   const [availableDiceTypes, setAvailableDiceTypes] = useState<DiceType[]>([])
   const [selectedDice, setSelectedDice] = useState<DiceType>(20)
   const [numberOfDice, setNumberOfDice] = useState(1)
@@ -13,6 +62,25 @@ export default function App() {
   const [result, setResult] = useState<RollResult | null>(null)
   const [allRevealed, setAllRevealed] = useState(false)
   const [rollKey, setRollKey] = useState(0)
+  const [showToggle, setShowToggle] = useState(false)
+  const { theme, toggleTheme } = useTheme()
+
+  const touchStartX = useRef<number>(0)
+
+  function handleThemeToggle() {
+    toggleTheme()
+    setShowToggle(true)
+    setTimeout(() => setShowToggle(false), 5000)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(diff) > 50) handleThemeToggle()
+  }
 
   useEffect(() => {
     const fetchDiceTypes = async () => {
@@ -61,28 +129,85 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
-      <h1 className="text-4xl">Crit Happens!</h1>
-      <Dropdown
-        availableDiceTypes={availableDiceTypes}
-        selectedDice={selectedDice}
-        numberOfDice={numberOfDice}
-        onDiceTypeChange={handleDiceTypeChange}
-        onNumberOfDiceChange={handleNumberOfDiceChange}
-      />
-      <Board
-        key={rollKey}
-        rollKey={rollKey}
-        selectedDice={selectedDice}
-        numberOfDice={numberOfDice}
-        result={result}
-        status={status}
-        onAllRevealed={handleAllRevealed}
-      />
-      {allRevealed && <Results result={result} />}
-      <button onClick={handleRollDice} className="px-8 py-4 text-xl">
-        Roll
-      </button>
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
+        {/* Top Bar */}
+        <div className="fixed top-0 left-0 right-0 z-20 bg-[var(--color-bg)] border-b border-[var(--color-border)] ">
+          <div className="flex justify-between items-center px-4 py-3 w-full">
+            <h1
+              onClick={!isTouchDevice ? handleThemeToggle : undefined}
+              onTouchStart={isTouchDevice ? handleTouchStart : undefined}
+              onTouchEnd={isTouchDevice ? handleTouchEnd : undefined}
+              className="text-2xl text-[var(--color-accent)] tracking-widest uppercase cursor-pointer text-left hover:opacity-70 transition-opacity duration-200"
+            >
+              Crit Happens!
+            </h1>
+            <Dropdown
+              availableDiceTypes={availableDiceTypes}
+              selectedDice={selectedDice}
+              numberOfDice={numberOfDice}
+              onDiceTypeChange={handleDiceTypeChange}
+              onNumberOfDiceChange={handleNumberOfDiceChange}
+            />
+          </div>
+          <AnimatePresence>
+            {showToggle && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="absolute left-0 right-0 top-full mt-2 flex justify-center"
+              >
+                <button
+                  onClick={handleThemeToggle}
+                  className={`relative w-16 h-8 rounded-full transition-colors duration-300 flex items-center px-1 ${
+                    theme === 'dark'
+                      ? 'bg-[var(--color-purple)]'
+                      : 'bg-[var(--color-accent)]'
+                  }`}
+                >
+                  <span
+                    className={`absolute w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-300 bg-[var(--color-bg)] ${
+                      theme === 'dark' ? 'translate-x-8' : 'translate-x-0'
+                    }`}
+                  >
+                    {theme === 'dark' ? (
+                      <FiMoon size={14} />
+                    ) : (
+                      <FiSun size={14} />
+                    )}
+                  </span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex flex-col items-center pt-20 pb-32 min-h-screen">
+          <Board
+            key={rollKey}
+            rollKey={rollKey}
+            selectedDice={selectedDice}
+            numberOfDice={numberOfDice}
+            result={result}
+            status={status}
+            onAllRevealed={handleAllRevealed}
+          />
+        </div>
+
+        {/* Fixed Bottom */}
+        <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center gap-2 px-4 py-3 bg-[var(--color-bg)] border-t border-[var(--color-border)] z-20">
+          {allRevealed && <Results result={result} />}
+          <button
+            onClick={handleRollDice}
+            className="w-full py-4 text-xl uppercase tracking-widest text-[var(--color-text)] bg-[var(--color-accent)] rounded"
+          >
+            Roll
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
