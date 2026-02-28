@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Dice from './Dice'
 import type { BoardProps } from '../types'
+import { useTheme } from '../context/useTheme'
 
 export default function Board({
   rollKey,
@@ -10,6 +11,7 @@ export default function Board({
   result,
   onAllRevealed,
 }: BoardProps) {
+  const { theme } = useTheme()
   const [revealedDice, setRevealedDice] = useState<boolean[]>([])
   const allRevealed = revealedDice.length > 0 && revealedDice.every(Boolean)
 
@@ -52,11 +54,20 @@ export default function Board({
         isRevealed: false,
       }))
 
+  const containerClass =
+    numberOfDice <= 3
+      ? 'flex flex-col items-center justify-center gap-20'
+      : 'grid grid-cols-2 gap-20 items-center justify-items-center'
+
   return (
-    <div className="board">
-      <div className="dice-container">
+    <div
+      data-theme={theme}
+      className="flex items-center justify-center min-h-[60vh]"
+    >
+      <div className={containerClass}>
         {dicesToShow.map((dice, index) => (
           <Dice
+            theme={theme}
             key={index}
             rollKey={rollKey}
             diceType={selectedDice}
