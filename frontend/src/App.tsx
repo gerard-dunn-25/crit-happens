@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useTheme } from './context/useTheme'
 import { rollDice, getDiceTypes } from './api'
 import type { RollResult, DiceType, Status } from './types'
@@ -8,53 +8,7 @@ import Dropdown from './components/Dropdown'
 import { FiSun, FiMoon } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 
-function useIsTouchDevice() {
-  const [isTouch, setIsTouch] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false
-    return (
-      'ontouchstart' in window ||
-      (navigator && (navigator.maxTouchPoints ?? 0) > 0) ||
-      window.matchMedia('(pointer: coarse)').matches
-    )
-  })
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mq = window.matchMedia('(pointer: coarse)')
-    const update = () =>
-      setIsTouch(
-        'ontouchstart' in window ||
-          (navigator && (navigator.maxTouchPoints ?? 0) > 0) ||
-          mq.matches,
-      )
-
-    if (typeof mq.addEventListener === 'function') {
-      mq.addEventListener('change', update)
-    } else {
-      // fallback for older browsers
-
-      mq.addListener(update)
-    }
-
-    // detect first-touch at runtime (helps hybrid devices)
-    const handleFirstTouch = () => update()
-    window.addEventListener('touchstart', handleFirstTouch, { once: true })
-
-    return () => {
-      if (typeof mq.removeEventListener === 'function') {
-        mq.removeEventListener('change', update)
-      } else {
-        mq.removeListener(update)
-      }
-      window.removeEventListener('touchstart', handleFirstTouch)
-    }
-  }, [])
-
-  return isTouch
-}
-
 export default function App() {
-  const isTouchDevice = useIsTouchDevice()
   const [availableDiceTypes, setAvailableDiceTypes] = useState<DiceType[]>([])
   const [selectedDice, setSelectedDice] = useState<DiceType>(20)
   const [numberOfDice, setNumberOfDice] = useState(1)
@@ -65,21 +19,10 @@ export default function App() {
   const [showToggle, setShowToggle] = useState(false)
   const { theme, toggleTheme } = useTheme()
 
-  const touchStartX = useRef<number>(0)
-
   function handleThemeToggle() {
     toggleTheme()
     setShowToggle(true)
     setTimeout(() => setShowToggle(false), 5000)
-  }
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const diff = e.changedTouches[0].clientX - touchStartX.current
-    if (Math.abs(diff) > 50) handleThemeToggle()
   }
 
   useEffect(() => {
@@ -135,9 +78,7 @@ export default function App() {
         <div className="fixed top-0 left-0 right-0 z-20 bg-[var(--color-bg)] border-b border-[var(--color-border)] ">
           <div className="flex justify-between items-center px-4 py-3 w-full">
             <h1
-              onClick={!isTouchDevice ? handleThemeToggle : undefined}
-              onTouchStart={isTouchDevice ? handleTouchStart : undefined}
-              onTouchEnd={isTouchDevice ? handleTouchEnd : undefined}
+              onClick={handleThemeToggle}
               className="text-2xl text-[var(--color-accent)] tracking-widest uppercase cursor-pointer text-left hover:opacity-70 transition-opacity duration-200"
             >
               Crit Happens!
