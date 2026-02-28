@@ -18,6 +18,7 @@ type BoardProps = {
 }
 
 type DiceProps = {
+  theme: 'dark' | 'light'
   rollKey: number
   diceType: DiceType
   value: number
