@@ -38,10 +38,13 @@ export default function Dropdown({
   }, [isOpen, controls])
 
   return (
-    <div className="fixed top-4 right-4 z-10">
-      <button onClick={() => setIsOpen(!isOpen)}>
-        <motion.div animate={controls}>
-          <GiDiceTwentyFacesTwenty size={48} />
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-center w-12 h-12"
+      >
+        <motion.div animate={controls} style={{ color: 'var(--color-icon)' }}>
+          <GiDiceTwentyFacesTwenty size={40} />
         </motion.div>
       </button>
 
@@ -52,10 +55,9 @@ export default function Dropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-20 right-4 flex flex-col items-end gap-2"
+            className="fixed top-16 left-0 right-0 flex flex-col items-center gap-4 bg-[var(--color-bg)] border-b border-[var(--color-border)] p-4 z-30"
           >
-            <label>Select Dice Type:</label>
-            <div className="dice-type-buttons">
+            <div className="flex flex-wrap justify-center gap-2">
               {availableDiceTypes.map((dice) => (
                 <button
                   key={dice}
@@ -70,7 +72,7 @@ export default function Dropdown({
                 </button>
               ))}
             </div>
-            <label>Number of Dice:</label>
+
             <div className="dice-count-buttons">
               <button
                 onClick={() =>
