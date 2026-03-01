@@ -55,9 +55,11 @@ export default function Board({
       }))
 
   const containerClass =
-    numberOfDice <= 3
-      ? 'flex flex-col items-center justify-center gap-20'
-      : 'grid grid-cols-2 gap-20 items-center justify-items-center'
+    numberOfDice === 5
+      ? 'grid grid-cols-2 gap-8'
+      : numberOfDice <= 3
+        ? 'flex flex-col items-center justify-center gap-8'
+        : 'grid grid-cols-2 gap-8 items-center justify-items-center'
 
   return (
     <div
@@ -65,21 +67,67 @@ export default function Board({
       className="flex items-center justify-center min-h-[60vh]"
     >
       <div className={containerClass}>
-        {dicesToShow.map((dice, index) => (
-          <Dice
-            theme={theme}
-            key={index}
-            rollKey={rollKey}
-            diceType={selectedDice}
-            isRolling={
-              status === 'rolling' || (result !== null && !allRevealed)
-            }
-            value={dice.value}
-            isCritical={dice.isCritical}
-            spinDelay={index * 1000}
-            isRevealed={dice.isRevealed}
-          />
-        ))}
+        {numberOfDice === 5 ? (
+          <>
+            {[0, 1].map((index) => (
+              <Dice
+                key={index}
+                rollKey={rollKey}
+                diceType={selectedDice}
+                isRolling={
+                  status === 'rolling' || (result !== null && !allRevealed)
+                }
+                value={dicesToShow[index].value}
+                isCritical={dicesToShow[index].isCritical}
+                spinDelay={index * 1000}
+                isRevealed={dicesToShow[index].isRevealed}
+              />
+            ))}
+            <div className="col-span-2 flex justify-center">
+              <Dice
+                key={4}
+                rollKey={rollKey}
+                diceType={selectedDice}
+                isRolling={
+                  status === 'rolling' || (result !== null && !allRevealed)
+                }
+                value={dicesToShow[4].value}
+                isCritical={dicesToShow[4].isCritical}
+                spinDelay={4 * 1000}
+                isRevealed={dicesToShow[4].isRevealed}
+              />
+            </div>
+            {[2, 3].map((index) => (
+              <Dice
+                key={index}
+                rollKey={rollKey}
+                diceType={selectedDice}
+                isRolling={
+                  status === 'rolling' || (result !== null && !allRevealed)
+                }
+                value={dicesToShow[index].value}
+                isCritical={dicesToShow[index].isCritical}
+                spinDelay={index * 1000}
+                isRevealed={dicesToShow[index].isRevealed}
+              />
+            ))}
+          </>
+        ) : (
+          dicesToShow.map((dice, index) => (
+            <Dice
+              key={index}
+              rollKey={rollKey}
+              diceType={selectedDice}
+              isRolling={
+                status === 'rolling' || (result !== null && !allRevealed)
+              }
+              value={dice.value}
+              isCritical={dice.isCritical}
+              spinDelay={index * 1000}
+              isRevealed={dice.isRevealed}
+            />
+          ))
+        )}
       </div>
     </div>
   )

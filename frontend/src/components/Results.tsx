@@ -5,16 +5,19 @@ export default function Results({ result }: ResultsProps) {
     <div className="flex flex-col items-center gap-2 w-full">
       {result && (
         <>
-          <h2 className="text-4xl font-bold text-[var(--color-accent)] tracking-widest">
+          <h2
+            className="text-4xl font-bold text-[var(--color-title)] tracking-widest"
+            style={{ fontFamily: 'var(--font-numbers)' }}
+          >
             {result.total}
           </h2>
-          <p className="text-2xl text-[var(--color-text)] opacity-70">
+          <p className="text-2xl text-[var(--color-text)] font-bold opacity-70">
             {result.rolls.map((roll, index) => (
               <span key={index}>
                 <span
                   className={
                     result.critical_rolls[index]
-                      ? 'text-[var(--color-crimson)]'
+                      ? 'text-[var(--color-crit)]'
                       : ''
                   }
                 >
