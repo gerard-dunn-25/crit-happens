@@ -5,22 +5,39 @@
 .dark {
   --color-bg: #0d0b08;
   --color-surface: #1a1612;
-  --color-text: #e8dcc8;
-  --color-accent: #c9a84c;
-  --color-crimson: #8b0000;
-  --color-purple: #6b21a8;
-  --color-dice: #6b21a8;
+  --color-text: #f0e6d0;
+  --color-dice-text: #0d0b08;
+  --color-title: #cc0000;
+  --color-border: #c9a84c55;
+  --color-button: #8b0000;
+  --color-button-text: #e8dcc8;
+  --color-toggle: #6b21a8;
   --color-icon: #a855f7;
-  --color-border: #c9a84c33;
+  --color-dice: #a855f7;
+  --color-crit: #ff2222;
+  --dice-filter: brightness(0) saturate(100%) invert(95%) sepia(10%)
+    saturate(200%) hue-rotate(20deg) brightness(95%) contrast(90%);
 }
 
 .light {
   --color-bg: #f5f0e8;
   --color-surface: #e8dcc8;
-  --color-text: #1a1612;
-  --color-accent: #8b6914;
-  --color-crimson: #8b0000;
-  --color-dice: #1d4ed8;
-  --color-icon: #1d4ed8;
+  --color-text: #0d0b08;
+  --color-dice-text: #ffffff;
+  --color-title: #8b6914;
   --color-border: #8b691433;
+  --color-button: #8b6914;
+  --color-button-text: #f5f0e8;
+  --color-toggle: #1844bd;
+  --color-icon: #1d4ed8;
+  --color-dice: #1d4ed8;
+  --color-crit: #ff0000;
+  --dice-filter: brightness(1) saturate(100%) invert(35%) sepia(90%)
+    saturate(399%) hue-rotate(5deg) brightness(95%) contrast(95%);
+}
+
+.dark,
+.light {
+  --font-title: 'Cinzel Decorative', serif;
+  --font-numbers: 'MedievalSharp', serif;
 }
