@@ -6,6 +6,7 @@ type DropdownProps = {
   numberOfDice: number
   onDiceTypeChange: (dice: DiceType) => void
   onNumberOfDiceChange: (count: number) => void
+  onOpenChange: (isOpen: boolean) => void
 }
 
 type BoardProps = {
@@ -18,7 +19,6 @@ type BoardProps = {
 }
 
 type DiceProps = {
-  theme: 'dark' | 'light'
   rollKey: number
   diceType: DiceType
   value: number
