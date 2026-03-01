@@ -71,7 +71,7 @@ export default function Dice({
     >
       <img
         src={blankDice[diceType]}
-        alt={`d${diceType}`}
+        alt={`Dice Placeholder d${diceType}`}
         style={{
           width: '100%',
           height: '100%',
@@ -90,7 +90,17 @@ export default function Dice({
           }}
           className={`text-l font-bold ${isRevealed && isCritical ? 'text-[var(--color-crit)] font-bold' : 'text-[var(--color-dice-text)]'}`}
         >
-          {isRevealed ? isCritical ? <CritIcon size={20} /> : value : '?'}
+          {isRevealed ? (
+            isCritical ? (
+              <span data-testid="crit-icon">
+                <CritIcon size={20} />
+              </span>
+            ) : (
+              value
+            )
+          ) : (
+            '?'
+          )}
         </span>
       </div>
     </motion.div>

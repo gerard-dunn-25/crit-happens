@@ -66,7 +66,7 @@ export default function Board({
       data-theme={theme}
       className="flex items-center justify-center min-h-[60vh]"
     >
-      <div className={containerClass}>
+      <div className={containerClass} data-testid="dice-container">
         {numberOfDice === 5 ? (
           <>
             {[0, 1].map((index) => (
