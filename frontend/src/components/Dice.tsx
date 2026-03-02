@@ -67,7 +67,15 @@ export default function Dice({
     <motion.div
       animate={controls}
       className="relative flex items-center justify-center"
-      style={{ width: '80px', height: '80px' }}
+      style={{
+        width: '80px',
+        height: '80px',
+        filter:
+          isRevealed && isCritical
+            ? 'drop-shadow(0 0 8px var(--color-crit)) drop-shadow(0 0 16px var(--color-crit))'
+            : 'none',
+        transition: 'filter 0.3s ease-in',
+      }}
     >
       <img
         src={blankDice[diceType]}
@@ -87,8 +95,13 @@ export default function Dice({
             marginTop: diceValueOffset[diceType],
             marginLeft: diceValueHorizontalOffset[diceType],
             fontFamily: 'var(--font-numbers)',
+            filter:
+              isRevealed && isCritical
+                ? 'drop-shadow(0 0 4px var(--color-crit))'
+                : 'none',
+            transition: 'filter 0.3s ease-in',
           }}
-          className={`text-l font-bold ${isRevealed && isCritical ? 'text-[var(--color-crit)] font-bold' : 'text-[var(--color-dice-text)]'}`}
+          className={`text-l font-bold ${isRevealed && isCritical ? 'text-[var(--color-crit)]' : 'text-[var(--color-dice-text)]'}`}
         >
           {isRevealed ? (
             isCritical ? (
