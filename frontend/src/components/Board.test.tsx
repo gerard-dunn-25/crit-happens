@@ -11,6 +11,7 @@ const defaultProps = {
   status: 'idle' as const,
   result: null,
   onAllRevealed: () => {},
+  isCompact: false,
 }
 
 const renderBoard = (props = {}) =>

@@ -12,6 +12,7 @@ const defaultProps = {
   isRolling: false,
   isCritical: false,
   isRevealed: false,
+  isCompact: false,
 }
 
 const renderDice = (props = {}) =>
