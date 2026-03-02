@@ -10,6 +10,7 @@ export default function Board({
   status,
   result,
   onAllRevealed,
+  isCompact,
 }: BoardProps) {
   const { theme } = useTheme()
   const [revealedDice, setRevealedDice] = useState<boolean[]>([])
@@ -81,6 +82,7 @@ export default function Board({
                 isCritical={dicesToShow[index].isCritical}
                 spinDelay={index * 1000}
                 isRevealed={dicesToShow[index].isRevealed}
+                isCompact={isCompact}
               />
             ))}
             <div className="col-span-2 flex justify-center">
@@ -95,6 +97,7 @@ export default function Board({
                 isCritical={dicesToShow[4].isCritical}
                 spinDelay={4 * 1000}
                 isRevealed={dicesToShow[4].isRevealed}
+                isCompact={isCompact}
               />
             </div>
             {[2, 3].map((index) => (
@@ -109,6 +112,7 @@ export default function Board({
                 isCritical={dicesToShow[index].isCritical}
                 spinDelay={index * 1000}
                 isRevealed={dicesToShow[index].isRevealed}
+                isCompact={isCompact}
               />
             ))}
           </>
@@ -125,6 +129,7 @@ export default function Board({
               isCritical={dice.isCritical}
               spinDelay={index * 1000}
               isRevealed={dice.isRevealed}
+              isCompact={isCompact}
             />
           ))
         )}

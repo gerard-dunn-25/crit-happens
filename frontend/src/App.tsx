@@ -107,7 +107,12 @@ export default function App() {
 
       {/* Main Content */}
       <div
-        className={`flex flex-col items-center pb-32 min-h-screen transition-all duration-200 ${dropdownOpen ? 'pt-64' : 'pt-20'}`}
+        className={`flex flex-col items-center justify-center transition-all duration-300 ${dropdownOpen ? 'pt-64' : 'pt-20'} pb-32`}
+        style={{
+          minHeight: '100vh',
+          maxHeight: '100vh',
+          overflow: 'hidden',
+        }}
       >
         <Board
           key={rollKey}
@@ -117,6 +122,7 @@ export default function App() {
           result={result}
           status={status}
           onAllRevealed={handleAllRevealed}
+          isCompact={dropdownOpen}
         />
       </div>
 

@@ -13,6 +13,7 @@ export default function Dice({
   isRolling,
   isCritical,
   isRevealed,
+  isCompact,
 }: DiceProps) {
   const { theme } = useTheme()
   const CritIcon = theme === 'dark' ? GiBurningSkull : GiAngelWings
@@ -45,36 +46,56 @@ export default function Dice({
     }
   }, [isRolling, isRevealed, controls, rollKey, spinDelay])
 
-  const diceValueOffset: Record<number, string> = {
-    4: '10px',
-    6: '-33px',
-    8: '-10px',
-    10: '-25px',
-    12: '0px',
-    20: '4px',
-  }
+  const diceSize = isCompact ? '55px' : '80px'
 
-  const diceValueHorizontalOffset: Record<number, string> = {
-    4: '0px',
-    6: '0px',
-    8: '0px',
-    10: '-3.5px',
-    12: '0px',
-    20: '0px',
-  }
+  const diceValueOffset: Record<number, string> = isCompact
+    ? {
+        4: '7px',
+        6: '-24px',
+        8: '-7px',
+        10: '-18px',
+        12: '0px',
+        20: '3px',
+      }
+    : {
+        4: '10px',
+        6: '-33px',
+        8: '-10px',
+        10: '-25px',
+        12: '0px',
+        20: '4px',
+      }
+
+  const diceValueHorizontalOffset: Record<number, string> = isCompact
+    ? {
+        4: '0px',
+        6: '0px',
+        8: '0px',
+        10: '-2.5px',
+        12: '0px',
+        20: '0px',
+      }
+    : {
+        4: '0px',
+        6: '0px',
+        8: '0px',
+        10: '-3.5px',
+        12: '0px',
+        20: '0px',
+      }
 
   return (
     <motion.div
       animate={controls}
       className="relative flex items-center justify-center"
       style={{
-        width: '80px',
-        height: '80px',
+        width: diceSize,
+        height: diceSize,
+        transition: 'width 0.3s ease, height 0.3s ease, filter 0.3s ease-in',
         filter:
           isRevealed && isCritical
             ? 'drop-shadow(0 0 8px var(--color-crit)) drop-shadow(0 0 16px var(--color-crit))'
             : 'none',
-        transition: 'filter 0.3s ease-in',
       }}
     >
       <img
