@@ -8,8 +8,9 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "https://crit-happens-tawny.vercel.app/"],
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["Access-Control-Allow-Origin"],
+    allow_headers=["*"],
 )
 
 class RollRequest(BaseModel):
