@@ -14,27 +14,31 @@ export default function Dice({
   isCritical,
   isRevealed,
   diceSize,
+  skipAnimation,
 }: DiceProps) {
   const { theme } = useTheme()
   const CritIcon = theme === 'dark' ? GiBurningSkull : GiAngelWings
 
   const controls = useAnimationControls()
+
   useEffect(() => {
     if (!isRevealed && isRolling) {
       const timeout = setTimeout(async () => {
-        controls.set({ rotateZ: 0 })
-        await controls.start({
-          rotateZ: 360 * 2,
-          transition: { duration: 1, ease: 'easeIn' as const, repeat: 0 },
-        })
-        await controls.start({
-          rotateZ: 1080 * 2,
-          transition: { duration: 1.5, ease: 'linear' as const, repeat: 0 },
-        })
-        await controls.start({
-          rotateZ: 1800 * 2,
-          transition: { duration: 2.5, ease: 'easeOut' as const, repeat: 0 },
-        })
+        if (!skipAnimation) {
+          controls.set({ rotateZ: 0 })
+          await controls.start({
+            rotateZ: 360 * 2,
+            transition: { duration: 1, ease: 'easeIn' as const, repeat: 0 },
+          })
+          await controls.start({
+            rotateZ: 1080 * 2,
+            transition: { duration: 1.5, ease: 'linear' as const, repeat: 0 },
+          })
+          await controls.start({
+            rotateZ: 1800 * 2,
+            transition: { duration: 2.5, ease: 'easeOut' as const, repeat: 0 },
+          })
+        }
       }, spinDelay)
       return () => clearTimeout(timeout)
     } else {
@@ -44,7 +48,7 @@ export default function Dice({
         transition: { duration: 0.5, ease: 'easeOut' as const },
       })
     }
-  }, [isRolling, isRevealed, controls, rollKey, spinDelay])
+  }, [isRolling, isRevealed, controls, rollKey, spinDelay, skipAnimation])
 
   const sizeRatio = diceSize / 80
 

@@ -13,6 +13,7 @@ const defaultProps = {
   isCritical: false,
   isRevealed: false,
   diceSize: 80,
+  skipAnimation: true,
 }
 
 const renderDice = (props = {}) =>

@@ -12,6 +12,7 @@ const defaultProps = {
   result: null,
   onAllRevealed: () => {},
   isCompact: false,
+  skipAnimation: true,
 }
 
 const renderBoard = (props = {}) =>

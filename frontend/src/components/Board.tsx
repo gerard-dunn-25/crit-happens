@@ -10,6 +10,7 @@ export default function Board({
   status,
   result,
   onAllRevealed,
+  skipAnimation,
 }: BoardProps) {
   const { theme } = useTheme()
   const [revealedDice, setRevealedDice] = useState<boolean[]>([])
@@ -35,6 +36,9 @@ export default function Board({
   useEffect(() => {
     if (!result) return
 
+    const baseDelay = skipAnimation ? 200 : 5000
+    const intervalDelay = skipAnimation ? 200 : 1000
+
     const timeouts = result.rolls.map((_, index) =>
       setTimeout(
         () => {
@@ -46,7 +50,7 @@ export default function Board({
             return next
           })
         },
-        5000 + index * 1000,
+        baseDelay + index * intervalDelay,
       ),
     )
 
@@ -115,6 +119,7 @@ export default function Board({
                 spinDelay={index * 1000}
                 isRevealed={dicesToShow[index].isRevealed}
                 diceSize={diceSize}
+                skipAnimation={skipAnimation}
               />
             ))}
             <div className="col-span-2 flex justify-center">
@@ -130,6 +135,7 @@ export default function Board({
                 spinDelay={4 * 1000}
                 isRevealed={dicesToShow[4].isRevealed}
                 diceSize={diceSize}
+                skipAnimation={skipAnimation}
               />
             </div>
             {[2, 3].map((index) => (
@@ -145,6 +151,7 @@ export default function Board({
                 spinDelay={index * 1000}
                 isRevealed={dicesToShow[index].isRevealed}
                 diceSize={diceSize}
+                skipAnimation={skipAnimation}
               />
             ))}
           </>
@@ -162,6 +169,7 @@ export default function Board({
               spinDelay={index * 1000}
               isRevealed={dice.isRevealed}
               diceSize={diceSize}
+              skipAnimation={skipAnimation}
             />
           ))
         )}

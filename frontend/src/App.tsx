@@ -6,8 +6,10 @@ import Results from './components/Results'
 import Board from './components/Board'
 import Dropdown from './components/Dropdown'
 import { FiSun, FiMoon } from 'react-icons/fi'
+import SettingsSidebar from './components/SettingsSidebar'
 
 export default function App() {
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [availableDiceTypes, setAvailableDiceTypes] = useState<DiceType[]>([])
   const [selectedDice, setSelectedDice] = useState<DiceType>(20)
   const [numberOfDice, setNumberOfDice] = useState(1)
@@ -18,6 +20,16 @@ export default function App() {
   const [rollKey, setRollKey] = useState(0)
 
   const { theme, toggleTheme } = useTheme()
+
+  const [skipAnimation, setSkipAnimation] = useState(() => {
+    return localStorage.getItem('skipAnimation') === 'true'
+  })
+
+  function handleSkipAnimationToggle() {
+    const next = !skipAnimation
+    setSkipAnimation(next)
+    localStorage.setItem('skipAnimation', String(next))
+  }
 
   useEffect(() => {
     const fetchDiceTypes = async () => {
@@ -73,7 +85,10 @@ export default function App() {
       {/* Top Bar */}
       <div className="fixed top-0 left-0 right-0 z-20 bg-[var(--color-bg)] border-b border-[var(--color-border)]">
         <div className="flex items-center justify-between px-4 py-3 w-full">
-          <h1 className="text-2xl text-[var(--color-title)] font-bold tracking-widest uppercase">
+          <h1
+            onClick={() => setSettingsOpen(true)}
+            className="text-2xl text-[var(--color-title)] font-bold tracking-widest uppercase cursor-pointer"
+          >
             Crit Happens!
           </h1>
           <div className="flex items-center gap-3">
@@ -105,6 +120,14 @@ export default function App() {
         </div>
       </div>
 
+      {/* Settings Sidebar */}
+      <SettingsSidebar
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        skipAnimation={skipAnimation}
+        onSkipAnimationToggle={handleSkipAnimationToggle}
+      />
+
       {/* Main Content */}
       <div
         className="fixed left-0 right-0 flex items-center justify-center"
@@ -122,6 +145,7 @@ export default function App() {
           result={result}
           status={status}
           onAllRevealed={handleAllRevealed}
+          skipAnimation={skipAnimation}
         />
       </div>
 
