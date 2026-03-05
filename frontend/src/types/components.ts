@@ -16,7 +16,6 @@ type BoardProps = {
   result: RollResult | null
   status: Status
   onAllRevealed: () => void
-  isCompact: boolean
 }
 
 type DiceProps = {
@@ -27,7 +26,7 @@ type DiceProps = {
   isRolling: boolean
   spinDelay: number
   isRevealed: boolean
-  isCompact: boolean
+  diceSize: number
 }
 
 type ResultsProps = {

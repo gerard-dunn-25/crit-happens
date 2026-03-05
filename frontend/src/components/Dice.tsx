@@ -13,7 +13,7 @@ export default function Dice({
   isRolling,
   isCritical,
   isRevealed,
-  isCompact,
+  diceSize,
 }: DiceProps) {
   const { theme } = useTheme()
   const CritIcon = theme === 'dark' ? GiBurningSkull : GiAngelWings
@@ -46,43 +46,25 @@ export default function Dice({
     }
   }, [isRolling, isRevealed, controls, rollKey, spinDelay])
 
-  const diceSize = isCompact ? '55px' : '80px'
+  const sizeRatio = diceSize / 80
 
-  const diceValueOffset: Record<number, string> = isCompact
-    ? {
-        4: '7px',
-        6: '-24px',
-        8: '-7px',
-        10: '-18px',
-        12: '0px',
-        20: '3px',
-      }
-    : {
-        4: '10px',
-        6: '-33px',
-        8: '-10px',
-        10: '-25px',
-        12: '0px',
-        20: '4px',
-      }
+  const diceValueOffset: Record<number, number> = {
+    4: 10 * sizeRatio,
+    6: -33 * sizeRatio,
+    8: -10 * sizeRatio,
+    10: -25 * sizeRatio,
+    12: 0,
+    20: 4 * sizeRatio,
+  }
 
-  const diceValueHorizontalOffset: Record<number, string> = isCompact
-    ? {
-        4: '0px',
-        6: '0px',
-        8: '0px',
-        10: '-2.5px',
-        12: '0px',
-        20: '0px',
-      }
-    : {
-        4: '0px',
-        6: '0px',
-        8: '0px',
-        10: '-3.5px',
-        12: '0px',
-        20: '0px',
-      }
+  const diceValueHorizontalOffset: Record<number, number> = {
+    4: 0,
+    6: 0,
+    8: 0,
+    10: -3.5 * sizeRatio,
+    12: 0,
+    20: 0,
+  }
 
   return (
     <div
@@ -98,8 +80,8 @@ export default function Dice({
         animate={controls}
         className="relative flex items-center justify-center"
         style={{
-          width: diceSize,
-          height: diceSize,
+          width: `${diceSize}px`,
+          height: `${diceSize}px`,
           transition: 'width 0.3s ease, height 0.3s ease',
         }}
       >
@@ -112,22 +94,20 @@ export default function Dice({
             filter: 'var(--dice-filter)',
           }}
         />
-        <div
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ paddingTop: diceValueOffset[diceType] }}
-        >
+        <div className="absolute inset-0 flex items-center justify-center">
           <span
             style={{
-              marginTop: diceValueOffset[diceType],
-              marginLeft: diceValueHorizontalOffset[diceType],
+              marginTop: `${diceValueOffset[diceType]}px`,
+              marginLeft: `${diceValueHorizontalOffset[diceType]}px`,
               fontFamily: 'var(--font-numbers)',
+              fontSize: `${14 * sizeRatio}px`,
             }}
-            className="text-l font-bold text-[var(--color-dice-text)]"
+            className="font-bold text-[var(--color-dice-text)]"
           >
             {isRevealed ? (
               isCritical ? (
                 <span data-testid="crit-icon">
-                  <CritIcon size={20} />
+                  <CritIcon size={20 * sizeRatio} />
                 </span>
               ) : (
                 value

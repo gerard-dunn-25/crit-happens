@@ -12,7 +12,7 @@ const defaultProps = {
   isRolling: false,
   isCritical: false,
   isRevealed: false,
-  isCompact: false,
+  diceSize: 80,
 }
 
 const renderDice = (props = {}) =>

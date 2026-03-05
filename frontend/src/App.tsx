@@ -107,11 +107,11 @@ export default function App() {
 
       {/* Main Content */}
       <div
-        className={`flex flex-col items-center justify-center transition-all duration-300 ${dropdownOpen ? 'pt-64' : 'pt-20'} pb-32`}
+        className="fixed left-0 right-0 flex items-center justify-center"
         style={{
-          minHeight: '100vh',
-          maxHeight: '100vh',
-          overflow: 'hidden',
+          top: dropdownOpen ? '256px' : '80px',
+          bottom: allRevealed ? '128px' : '80px',
+          transition: 'top 0.3s ease, bottom 0.3s ease',
         }}
       >
         <Board
@@ -122,7 +122,6 @@ export default function App() {
           result={result}
           status={status}
           onAllRevealed={handleAllRevealed}
-          isCompact={dropdownOpen}
         />
       </div>
 
