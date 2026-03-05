@@ -55,7 +55,7 @@ export default function Board({
     )
 
     return () => timeouts.forEach(clearTimeout)
-  }, [result])
+  }, [result, skipAnimation])
 
   useEffect(() => {
     if (allRevealed) {

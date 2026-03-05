@@ -1,3 +1,4 @@
+import React from 'react'
 import type { DiceProps } from '../types'
 import { GiAngelWings, GiBurningSkull } from 'react-icons/gi'
 import { motion, useAnimationControls } from 'framer-motion'
@@ -58,7 +59,7 @@ export default function Dice({
     8: -10 * sizeRatio,
     10: -25 * sizeRatio,
     12: 0,
-    20: 4 * sizeRatio,
+    20: 10 * sizeRatio,
   }
 
   const diceValueHorizontalOffset: Record<number, number> = {
@@ -78,6 +79,10 @@ export default function Dice({
             ? 'drop-shadow(0 0 8px var(--color-crit)) drop-shadow(0 0 16px var(--color-crit))'
             : 'none',
         transition: 'filter 0.3s ease-in',
+        padding: '12px',
+        margin: '-12px',
+        overflow: 'visible',
+        isolation: 'isolate' as React.CSSProperties['isolation'],
       }}
     >
       <motion.div
