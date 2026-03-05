@@ -74,7 +74,7 @@ export default function Board({
   const rows = numberOfDice <= 3 ? numberOfDice : numberOfDice <= 4 ? 2 : 3
   const cols = numberOfDice <= 3 ? 1 : 2
   const gap = 32
-  const padding = 32
+  const padding = 80
 
   const maxByHeight = Math.floor(
     (availableHeight - padding - gap * (rows - 1)) / rows,
