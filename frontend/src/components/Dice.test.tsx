@@ -37,6 +37,6 @@ describe('Dice', () => {
     renderDice({ isRevealed: true, value: 20, isCritical: true })
     expect(screen.queryByText('20')).not.toBeInTheDocument()
     const critIcon = screen.getByTestId('crit-icon')
-    expect(critIcon.parentElement).toHaveClass('text-[var(--color-crit)]')
+    expect(critIcon).toBeInTheDocument()
   })
 })

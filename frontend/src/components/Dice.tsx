@@ -85,58 +85,59 @@ export default function Dice({
       }
 
   return (
-    <motion.div
-      animate={controls}
-      className="relative flex items-center justify-center"
+    <div
       style={{
-        width: diceSize,
-        height: diceSize,
-        transition: 'width 0.3s ease, height 0.3s ease, filter 0.3s ease-in',
         filter:
           isRevealed && isCritical
             ? 'drop-shadow(0 0 8px var(--color-crit)) drop-shadow(0 0 16px var(--color-crit))'
             : 'none',
+        transition: 'filter 0.3s ease-in',
       }}
     >
-      <img
-        src={blankDice[diceType]}
-        alt={`Dice Placeholder d${diceType}`}
+      <motion.div
+        animate={controls}
+        className="relative flex items-center justify-center"
         style={{
-          width: '100%',
-          height: '100%',
-          filter: 'var(--dice-filter)',
+          width: diceSize,
+          height: diceSize,
+          transition: 'width 0.3s ease, height 0.3s ease',
         }}
-      />
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ paddingTop: diceValueOffset[diceType] }}
       >
-        <span
+        <img
+          src={blankDice[diceType]}
+          alt={`Dice Placeholder d${diceType}`}
           style={{
-            marginTop: diceValueOffset[diceType],
-            marginLeft: diceValueHorizontalOffset[diceType],
-            fontFamily: 'var(--font-numbers)',
-            filter:
-              isRevealed && isCritical
-                ? 'drop-shadow(0 0 4px var(--color-crit))'
-                : 'none',
-            transition: 'filter 0.3s ease-in',
+            width: '100%',
+            height: '100%',
+            filter: 'var(--dice-filter)',
           }}
-          className={`text-l font-bold ${isRevealed && isCritical ? 'text-[var(--color-crit)]' : 'text-[var(--color-dice-text)]'}`}
+        />
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ paddingTop: diceValueOffset[diceType] }}
         >
-          {isRevealed ? (
-            isCritical ? (
-              <span data-testid="crit-icon">
-                <CritIcon size={20} />
-              </span>
+          <span
+            style={{
+              marginTop: diceValueOffset[diceType],
+              marginLeft: diceValueHorizontalOffset[diceType],
+              fontFamily: 'var(--font-numbers)',
+            }}
+            className="text-l font-bold text-[var(--color-dice-text)]"
+          >
+            {isRevealed ? (
+              isCritical ? (
+                <span data-testid="crit-icon">
+                  <CritIcon size={20} />
+                </span>
+              ) : (
+                value
+              )
             ) : (
-              value
-            )
-          ) : (
-            '?'
-          )}
-        </span>
-      </div>
-    </motion.div>
+              '?'
+            )}
+          </span>
+        </div>
+      </motion.div>
+    </div>
   )
 }
