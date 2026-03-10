@@ -139,6 +139,10 @@ export default function App() {
         onClose={() => setSettingsOpen(false)}
         skipAnimation={skipAnimation}
         onSkipAnimationToggle={handleSkipAnimationToggle}
+        onShowTutorial={() => {
+          setSettingsOpen(false)
+          setTimeout(() => setTutorialOpen(true), 300)
+        }}
       />
 
       {/* Main Content */}

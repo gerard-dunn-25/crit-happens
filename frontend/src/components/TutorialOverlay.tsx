@@ -89,6 +89,16 @@ export default function TutorialOverlay({
     onOpenDropdown,
   ])
 
+  useEffect(() => {
+    if (isOpen) {
+      const timeout = setTimeout(() => {
+        setStepIndex(0)
+        setTargetRect(null)
+      }, 0)
+      return () => clearTimeout(timeout)
+    }
+  }, [isOpen])
+
   if (!isOpen || !targetRect) return null
 
   const padding = 8

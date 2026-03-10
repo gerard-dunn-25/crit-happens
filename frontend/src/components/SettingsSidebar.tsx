@@ -5,14 +5,20 @@ type SettingsSidebarProps = {
   onClose: () => void
   skipAnimation: boolean
   onSkipAnimationToggle: () => void
+  onShowTutorial: () => void
 }
+
 
 export default function SettingsSidebar({
   isOpen,
   onClose,
   skipAnimation,
   onSkipAnimationToggle,
+  onShowTutorial,
 }: SettingsSidebarProps) {
+  
+  
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -86,6 +92,28 @@ export default function SettingsSidebar({
                       skipAnimation ? 'translate-x-6' : 'translate-x-0'
                     }`}
                   />
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <span
+                  className="text-sm"
+                  style={{
+                    fontFamily: 'var(--font-numbers)',
+                    color: 'var(--color-text)',
+                  }}
+                >
+                  Show Tutorial
+                </span>
+                <button
+                  onClick={onShowTutorial}
+                  className="text-xs px-3 py-1 rounded"
+                  style={{
+                    backgroundColor: 'var(--color-title)',
+                    color: 'var(--color-bg)',
+                    fontFamily: 'var(--font-numbers)',
+                  }}
+                >
+                  Show
                 </button>
               </div>
             </div>
