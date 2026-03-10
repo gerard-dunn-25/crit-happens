@@ -7,6 +7,7 @@ type DropdownProps = {
   onDiceTypeChange: (dice: DiceType) => void
   onNumberOfDiceChange: (count: number) => void
   onOpenChange: (isOpen: boolean) => void
+  forceOpen?: boolean
 }
 
 type BoardProps = {

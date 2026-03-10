@@ -11,10 +11,21 @@ export default function Dropdown({
   onOpenChange,
   onDiceTypeChange,
   onNumberOfDiceChange,
+  forceOpen,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const controls = useAnimationControls()
+
+  useEffect(() => {
+    if (forceOpen) {
+      const timeout = setTimeout(() => {
+        setIsOpen(true)
+        onOpenChange(true)
+      }, 0)
+      return () => clearTimeout(timeout)
+    }
+  }, [forceOpen, onOpenChange])
 
   useEffect(() => {
     controls.set({ rotate: 0 })
@@ -48,6 +59,7 @@ export default function Dropdown({
   return (
     <div className="relative">
       <button
+        data-tutorial="dice-selector"
         onClick={handleToggle}
         className="flex items-center justify-center w-16 h-16"
       >
@@ -66,7 +78,10 @@ export default function Dropdown({
             className="fixed top-24 left-0 right-0 flex flex-col items-center gap-4 bg-[var(--color-bg)] border-b font-bold border-[var(--color-border)] p-4 z-30"
           >
             {/* Dice type selection */}
-            <div className="flex flex-wrap justify-center gap-4">
+            <div
+              data-tutorial="dice-types"
+              className="flex flex-wrap justify-center gap-4"
+            >
               {availableDiceTypes.map((dice) => (
                 <button
                   key={dice}
@@ -92,7 +107,10 @@ export default function Dropdown({
             </div>
 
             <div className="w-full flex flex-col items-center gap-4">
-              <div className="flex items-center justify-center gap-6">
+              <div
+                data-tutorial="dice-count"
+                className="flex items-center justify-center gap-6"
+              >
                 <button
                   onClick={() =>
                     onNumberOfDiceChange(Math.max(1, numberOfDice - 1))

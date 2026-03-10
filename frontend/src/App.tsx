@@ -7,6 +7,7 @@ import Board from './components/Board'
 import Dropdown from './components/Dropdown'
 import { FiSun, FiMoon } from 'react-icons/fi'
 import SettingsSidebar from './components/SettingsSidebar'
+import TutorialOverlay from './components/TutorialOverlay'
 
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -20,6 +21,15 @@ export default function App() {
   const [rollKey, setRollKey] = useState(0)
 
   const { theme, toggleTheme } = useTheme()
+  const [tutorialOpen, setTutorialOpen] = useState(() => {
+    return localStorage.getItem('tutorialComplete') !== 'true'
+  })
+  const [forceDropdownOpen, setForceDropdownOpen] = useState(false)
+
+  function handleTutorialComplete() {
+    setTutorialOpen(false)
+    localStorage.setItem('tutorialComplete', 'true')
+  }
 
   const [skipAnimation, setSkipAnimation] = useState(() => {
     return localStorage.getItem('skipAnimation') === 'true'
@@ -65,7 +75,7 @@ export default function App() {
   async function handleRollDice() {
     try {
       setAllRevealed(false)
-      setResult(null) // Reset result so board clears
+      setResult(null)
       setRollKey((prev) => prev + 1)
       setStatus('rolling')
       const result = await rollDice({ diceType: selectedDice, numberOfDice })
@@ -86,8 +96,9 @@ export default function App() {
       <div className="fixed top-0 left-0 right-0 z-20 bg-[var(--color-bg)] border-b border-[var(--color-border)]">
         <div className="flex items-center justify-between px-4 py-3 w-full">
           <h1
+            data-tutorial="settings"
             onClick={() => setSettingsOpen(true)}
-            className="text-2xl text-[var(--color-title)] font-bold tracking-widest uppercase cursor-pointer"
+            className="text-2xl text-[var(--color-title)] font-bold tracking-widest uppercase cursor-pointer w-fit"
           >
             Crit Happens!
           </h1>
@@ -108,6 +119,7 @@ export default function App() {
                 {theme === 'dark' ? <FiMoon size={16} /> : <FiSun size={16} />}
               </span>
             </button>
+
             <Dropdown
               availableDiceTypes={availableDiceTypes}
               selectedDice={selectedDice}
@@ -115,6 +127,7 @@ export default function App() {
               onOpenChange={setDropdownOpen}
               onDiceTypeChange={handleDiceTypeChange}
               onNumberOfDiceChange={handleNumberOfDiceChange}
+              forceOpen={forceDropdownOpen}
             />
           </div>
         </div>
@@ -153,12 +166,19 @@ export default function App() {
       <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center gap-2 px-4 py-3 bg-[var(--color-bg)] border-t border-[var(--color-border)] z-20">
         {allRevealed && <Results result={result} />}
         <button
+          data-tutorial="roll-button"
           onClick={handleRollDice}
           className="w-full py-4 text-xl uppercase tracking-widest text-[var(--color-text)] bg-[var(--color-button)] font-bold rounded"
         >
           Roll
         </button>
       </div>
+      <TutorialOverlay
+        isOpen={tutorialOpen}
+        onComplete={handleTutorialComplete}
+        dropdownOpen={dropdownOpen}
+        onOpenDropdown={() => setForceDropdownOpen(true)}
+      />
     </div>
   )
 }
